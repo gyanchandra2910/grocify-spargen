@@ -7,4 +7,9 @@
   font-family: "outfit", sans-serif;
 }
 
+:root {
+  --color-primary: #1E3A8A;
+  --color-primary-dull: #EFF6FF;
+}
+
 
