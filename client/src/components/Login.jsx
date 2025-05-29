@@ -1,67 +1,106 @@
 import React from "react";
+import { useAppContext } from "../context/AppContext";
+import { toast } from "react-hot-toast";
 
 const Login = () => {
-    const {showUser, setShowUserLogin, setUser} = useAppContext();
-    const [state, setState] = React.useState("Login")
+    const { showUserLogin, setShowUserLogin, setUser } = useAppContext();
+    const [state, setState] = React.useState("Login");
     const [name, setName] = React.useState("");
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
 
     const onSubmitHandler = (e) => {
         e.preventDefault();
-        setUser({name: name, email: email, password: password});
+        if (state === "Login") {
+            // For demo purposes just log in with the provided details
+            setUser({ name: email.split('@')[0], email: email });
+            toast.success("Login successful!");
+        } else {
+            // For signup
+            if (!name) {
+                toast.error("Please enter your name");
+                return;
+            }
+            setUser({ name: name, email: email });
+            toast.success("Account created successfully!");
+        }
         setShowUserLogin(false);
-    }
+    };
 
     return (
-        <div onClick={() => setShowUserLogin(false)} className="flex h-[700px] w-full">
-     
-            <div className="w-full hidden md:inline-block">
-                <img className="h-full" src="https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/login/leftSideImage.png" alt="leftSideImage" />
-            </div>
+        <div 
+            onClick={() => setShowUserLogin(false)} 
+            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+        >
+            <div className="bg-white rounded-lg shadow-lg w-full max-w-md overflow-hidden" onClick={(e) => e.stopPropagation()}>
+                <div className="p-6">
+                    <h2 className="text-2xl font-semibold text-center">{state}</h2>
+                    <p className="text-gray-500 text-center mt-1">
+                        {state === "Login" ? "Welcome back!" : "Create a new account"}
+                    </p>
 
-            <div className="w-full flex flex-col items-center justify-center">
-                <form onSubmit={onSubmitHandler} onClick={(e) => e.stopPropagation()} className="md:w-96 w-80 flex flex-col items-center justify-center">
-                    <h2 className="text-4xl text-gray-900 font-medium">Sign in</h2>
-                    <p className="text-sm text-gray-500/90 mt-3">Welcome back! Please sign in to continue</p>
-
-                    <button type="button" className="w-full mt-8 bg-gray-500/10 flex items-center justify-center h-12 rounded-full">
-                        <img src="https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/login/googleLogo.svg" alt="googleLogo" />
-                    </button>
-
-                    <div className="flex items-center gap-4 w-full my-5">
-                        <div className="w-full h-px bg-gray-300/90"></div>
-                        <p className="w-full text-nowrap text-sm text-gray-500/90">or sign in with email</p>
-                        <div className="w-full h-px bg-gray-300/90"></div>
-                    </div>
-
-                    <div className="flex items-center w-full bg-transparent border border-gray-300/60 h-12 rounded-full overflow-hidden pl-6 gap-2">
-                        <svg width="16" height="11" viewBox="0 0 16 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path fillRule="evenodd" clipRule="evenodd" d="M0 .55.571 0H15.43l.57.55v9.9l-.571.55H.57L0 10.45zm1.143 1.138V9.9h13.714V1.69l-6.503 4.8h-.697zM13.749 1.1H2.25L8 5.356z" fill="#6B7280"/>
-                        </svg>
-                        <input type="email" placeholder="Email id" className="bg-transparent text-gray-500/80 placeholder-gray-500/80 outline-none text-sm w-full h-full" required />                 
-                    </div>
-
-                    <div className="flex items-center mt-6 w-full bg-transparent border border-gray-300/60 h-12 rounded-full overflow-hidden pl-6 gap-2">
-                        <svg width="13" height="17" viewBox="0 0 13 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M13 8.5c0-.938-.729-1.7-1.625-1.7h-.812V4.25C10.563 1.907 8.74 0 6.5 0S2.438 1.907 2.438 4.25V6.8h-.813C.729 6.8 0 7.562 0 8.5v6.8c0 .938.729 1.7 1.625 1.7h9.75c.896 0 1.625-.762 1.625-1.7zM4.063 4.25c0-1.406 1.093-2.55 2.437-2.55s2.438 1.144 2.438 2.55V6.8H4.061z" fill="#6B7280"/>
-                        </svg>
-                        <input type="password" placeholder="Password" className="bg-transparent text-gray-500/80 placeholder-gray-500/80 outline-none text-sm w-full h-full" required />
-                    </div>
-
-                    <div className="w-full flex items-center justify-between mt-8 text-gray-500/80">
-                        <div className="flex items-center gap-2">
-                            <input className="h-5" type="checkbox" id="checkbox" />
-                            <label className="text-sm" htmlFor="checkbox">Remember me</label>
+                    <form onSubmit={onSubmitHandler} className="mt-6 space-y-4">
+                        {state === "Signup" && (
+                            <div className="space-y-1">
+                                <label htmlFor="name" className="text-sm font-medium text-gray-700">Name</label>
+                                <input
+                                    type="text"
+                                    id="name"
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500"
+                                    placeholder="Your name"
+                                />
+                            </div>
+                        )}
+                        
+                        <div className="space-y-1">
+                            <label htmlFor="email" className="text-sm font-medium text-gray-700">Email</label>
+                            <input
+                                type="email"
+                                id="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500"
+                                placeholder="your.email@example.com"
+                                required
+                            />
                         </div>
-                        <a className="text-sm underline" href="#">Forgot password?</a>
-                    </div>
+                        
+                        <div className="space-y-1">
+                            <label htmlFor="password" className="text-sm font-medium text-gray-700">Password</label>
+                            <input
+                                type="password"
+                                id="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500"
+                                placeholder="******"
+                                required
+                            />
+                        </div>
 
-                    <button type="submit" className="mt-8 w-full h-11 rounded-full text-white bg-indigo-500 hover:opacity-90 transition-opacity">
-                        Login
-                    </button>
-                    <p className="text-gray-500/90 text-sm mt-4">Don't have an account? <a className="text-indigo-400 hover:underline" href="#">Sign up</a></p>
-                </form>
+                        <button
+                            type="submit"
+                            className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                        >
+                            {state === "Login" ? "Sign In" : "Create Account"}
+                        </button>
+                    </form>
+
+                    <div className="mt-4 text-center">
+                        <p className="text-sm text-gray-600">
+                            {state === "Login" ? "Don't have an account? " : "Already have an account? "}
+                            <button
+                                type="button"
+                                className="font-medium text-green-600 hover:text-green-500"
+                                onClick={() => setState(state === "Login" ? "Signup" : "Login")}
+                            >
+                                {state === "Login" ? "Sign up" : "Sign in"}
+                            </button>
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
     );

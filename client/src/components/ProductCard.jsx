@@ -5,12 +5,19 @@ import { useAppContext } from "../context/AppContext";
 const ProductCard = ({ product }) => {
   const { currency, addToCart, updateCartItem, removeFromCart, cartItems, navigate } = useAppContext();
 
-  return product && (
-    <div className="border border-gray-500/20 rounded-md md:px-4 px-3 py-2 bg-white h-full flex flex-col">
-      <div 
-        className="group cursor-pointer flex items-center justify-center px-2 mb-3"
-        onClick={() => navigate(`/product/${product._id}`)}
-      >
+  const handleProductClick = () => {
+    navigate(`/product/${product.category.toLowerCase()}/${product._id}`);
+    window.scrollTo(0, 0);
+  };
+
+  if (!product) return null;
+
+  return (
+    <div 
+      onClick={handleProductClick} 
+      className="border border-gray-500/20 rounded-md md:px-4 px-3 py-2 bg-white h-full flex flex-col"
+    >
+      <div className="group cursor-pointer flex items-center justify-center px-2 mb-3">
         <img 
           className="group-hover:scale-105 transition h-40 object-contain" 
           src={product.image[0]} 
