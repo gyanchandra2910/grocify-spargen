@@ -1,38 +1,46 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useAppContext } from "../context/AppContext";
-import { Link } from "react-router-dom";
-import { dummyAddress } from "../assets/assets";
+import { Link, useNavigate } from "react-router-dom";
 
 const Cart = () => {
+  const navigate = useNavigate();
   const { cartItems, products, currency, removeFromCart, updateCartItem } = useAppContext();
   const [cartArray, setCartArray] = useState([]);
-  const [addresses, setAddresses] = useState([]);
   const [showAddress, setShowAddress] = useState(false);
   const [paymentOption, setPaymentOption] = useState("COD");
-  
 
-    const getCart = () => {
+  const getCart = () => {
+    let tempArray = [];
+    for(const key in cartItems) {
+      const product = products.find(product => product._id === key);
+      if (product) {
+        product.quantity = cartItems[key];
+        tempArray.push(product);
+      }
+    }
+    setCartArray(tempArray);
+  };
 
-        let tempArray = [];
-        for(const item in cartItems) {
-            let product = products.find(product => product._id === item);
-            if(product) {
-                tempArray.push({...product, quantity: cartItems[item]});
-            }
-        }
-  // Get cart products
-  const cartProducts = products.filter(product => cartItems[product._id]);
-  
+  useEffect(() => {
+    if(products.length > 0) {
+      getCart();
+    }
+  }, [cartItems, products]);
+
+  const getCartCount = () => {
+    return Object.values(cartItems).reduce((total, quantity) => total + quantity, 0);
+  };
+
   // Calculate total
-  const subtotal = cartProducts.reduce((total, product) => {
-    return total + (product.offerPrice * cartItems[product._id]);
+  const subtotal = cartArray.reduce((total, product) => {
+    return total + (product.offerPrice * product.quantity);
   }, 0);
   
-  const shipping = subtotal > 0 ? 0 : 0; // Free shipping
+  const shipping = 0; // Free shipping
   const tax = subtotal * 0.02; // 2% tax
   const total = subtotal + shipping + tax;
 
-  if (cartProducts.length === 0) {
+  if (cartArray.length === 0) {
     return (
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-2xl md:text-3xl font-bold mb-6">Your Cart</h1>
@@ -53,7 +61,7 @@ const Cart = () => {
     <div className="flex flex-col md:flex-row py-16 max-w-6xl w-full px-6 mx-auto">
       <div className='flex-1 max-w-4xl'>
         <h1 className="text-3xl font-medium mb-6">
-          Shopping Cart <span className="text-sm text-green-600">{cartProducts.length} Items</span>
+          Shopping Cart <span className="text-sm text-green-600">{getCartCount()} Items</span>
         </h1>
 
         <div className="grid grid-cols-[2fr_1fr_1fr] text-gray-500 text-base font-medium pb-3">
@@ -62,10 +70,16 @@ const Cart = () => {
           <p className="text-center">Action</p>
         </div>
 
-        {cartProducts.map((product) => (
+        {cartArray.map((product) => (
           <div key={product._id} className="grid grid-cols-[2fr_1fr_1fr] text-gray-500 items-center text-sm md:text-base font-medium pt-3 border-t border-gray-200 py-4">
             <div className="flex items-center md:gap-6 gap-3">
-              <div className="cursor-pointer w-24 h-24 flex items-center justify-center border border-gray-300 rounded">
+              <div 
+                onClick={() => {
+                  navigate(`/product/${product.category.toLowerCase()}/${product._id}`);
+                  window.scrollTo(0, 0);
+                }} 
+                className="cursor-pointer w-24 h-24 flex items-center justify-center border border-gray-300 rounded"
+              >
                 <img className="max-w-full h-full object-contain" src={product.image[0]} alt={product.name} />
               </div>
               <div>
@@ -81,7 +95,7 @@ const Cart = () => {
                       >
                         -
                       </button>
-                      <span>{cartItems[product._id]}</span>
+                      <span>{product.quantity}</span>
                       <button 
                         onClick={() => updateCartItem(product._id)} 
                         className="text-green-600 w-6 h-6 flex items-center justify-center bg-gray-100 rounded-full hover:bg-gray-200"
@@ -93,11 +107,10 @@ const Cart = () => {
                 </div>
               </div>
             </div>
-            <p className="text-center font-medium">{currency}{(product.offerPrice * cartItems[product._id]).toFixed(2)}</p>
+            <p className="text-center font-medium">{currency}{(product.offerPrice * product.quantity).toFixed(2)}</p>
             <button 
               onClick={() => {
-                // Remove all quantities of this product
-                for (let i = 0; i < cartItems[product._id]; i++) {
+                for (let i = 0; i < product.quantity; i++) {
                   removeFromCart(product._id);
                 }
               }} 
@@ -145,7 +158,11 @@ const Cart = () => {
           </div>
 
           <p className="text-sm font-medium uppercase mt-6">Payment Method</p>
-          <select className="w-full border border-gray-300 bg-white px-3 py-2 mt-2 outline-none rounded">
+          <select 
+            value={paymentOption}
+            onChange={(e) => setPaymentOption(e.target.value)}
+            className="w-full border border-gray-300 bg-white px-3 py-2 mt-2 outline-none rounded"
+          >
             <option value="COD">Cash On Delivery</option>
             <option value="Online">Online Payment</option>
           </select>
@@ -176,4 +193,4 @@ const Cart = () => {
   );
 };
 
-export default Cart; 
+export default Cart;
