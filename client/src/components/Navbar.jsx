@@ -6,7 +6,7 @@ import { useAppContext } from "../context/AppContext";
 const Navbar = () => {
   const [open, setOpen] = React.useState(false);
   const [profileOpen, setProfileOpen] = React.useState(false);
-  const { user, setUser, setShowUserLogin, navigate, searchQuery, setSearchQuery} =
+  const { user, setUser, setShowUserLogin, navigate, searchQuery, setSearchQuery, getCartCount, getCartAmount} =
     useAppContext();
   // For debugging
   React.useEffect(() => {
@@ -69,7 +69,7 @@ useEffect(() => {
             className="w-6 opacity-80"
           />{" "}
           <button className="absolute -top-2 -right-3 text-xs text-white bg-green-600 w-[18px] h-[18px] rounded-full">
-            3
+            {getCartCount()}
           </button>
         </div>{" "}
         {!user ? (
@@ -112,6 +112,12 @@ useEffect(() => {
           </div>
         )}
       </div>
+      <div onClick={() => navigate("/cart")} className="relative cursor-pointer">
+        <img src={assets.nav_cart_icon} alt="cart" className="w-6 opacity-80" />
+        <button className="absolute -top-2 -right-3 text-xs text-white bg-green-600 w-[18px] h-[18px] rounded-full">
+          {getCartCount()}
+        </button>
+      </div>
       <button
         onClick={() => setOpen(!open)}
         aria-label="Menu"
@@ -120,6 +126,9 @@ useEffect(() => {
         {/* Menu Icon SVG */}
         <img src={assets.menu_icon} alt="menu" />
       </button>
+
+
+      
       {open && (
         <div
           className={`${
