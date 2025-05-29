@@ -3,12 +3,14 @@ import Navbar from "./components/Navbar";
 import { Routes, Route, useLocation } from "react-router-dom";
 import Home from "./pages/Home";
 import LoginModal from "./components/LoginModal";
-
+import { Toaster } from "react-hot-toast";
 const App = () => {
   const isSellerPath = useLocation().pathname.includes("seller");
   return (
     <div>
       {isSellerPath ? null : <Navbar />}
+
+      <Toaster />
       <div className={`${isSellerPath ? "bg-green-100" : "bg-primary-50"}`}>
         <div className="max-w-7xl mx-auto">
           <Routes>

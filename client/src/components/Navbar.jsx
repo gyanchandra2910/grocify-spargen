@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import { assets } from "../assets/assets";
 import { useAppContext } from "../context/AppContext";
 
-const App = () => {
+const Navbar = () => {
   const [open, setOpen] = React.useState(false);
   const [profileOpen, setProfileOpen] = React.useState(false);
   const { user, setUser, setShowUserLogin, navigate, showUserLogin } =
@@ -156,4 +156,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default Navbar;
