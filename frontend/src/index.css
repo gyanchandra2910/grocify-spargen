@@ -1,0 +1,186 @@
+:root {
+  --bg-color-light: #ffffff;
+  --text-color-light: #212529;
+  --bg-color-dark: #121212;
+  --text-color-dark: #f8f9fa;
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, #f8fafc 0%, #e3f0ff 100%);
+  background-color: var(--bg-color-light);
+  color: var(--text-color-light);
+}
+
+body.dark {
+  background-color: var(--bg-color-dark) !important;
+  color: var(--text-color-dark) !important;
+}
+
+#root {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+footer {
+  flex-shrink: 0;
+  margin-bottom: 0 !important;
+  border-top: none !important;
+  box-shadow: 0 -2px 12px 0 rgba(44, 62, 80, 0.04);
+}
+
+/* Remove any extra space after the footer */
+body > footer + * {
+  display: none !important;
+}
+
+h3 {
+  padding: 1rem 0;
+}
+
+h1 {
+  font-size: 1.8rem;
+  padding: 1rem 0;
+}
+
+h2 {
+  font-size: 1.4rem;
+  padding: 0.5rem 0;
+}
+
+.rating span {
+  margin: 0.1rem;
+}
+
+/* carousel */
+.carousel-item-next,
+.carousel-item-prev,
+.carousel-item.active {
+  display: flex;
+}
+.carousel-caption {
+  position: absolute;
+  top: 0;
+}
+
+.carousel-caption h2 {
+  color: #fff;
+}
+
+.carousel img {
+  height: 300px;
+  padding: 30px;
+  margin: 40px;
+  border-radius: 50%;
+}
+.carousel a {
+  margin: 0 auto;
+}
+
+h1, h2, h3, h4, h5, h6, p, span, div, a, button, label, th, td, li, .form-label, .form-control, .btn {
+  color: inherit !important;
+}
+
+/* Add dark mode support for .list-group-item and .card in dark mode */
+body.dark .list-group-item,
+body.dark .list-group-item-action {
+  background-color: var(--bg-color-dark) !important;
+  color: var(--text-color-dark) !important;
+  border-color: #23272b !important;
+}
+body.dark .card,
+body.dark .card-header,
+body.dark .card-body {
+  background-color: var(--bg-color-dark) !important;
+  color: var(--text-color-dark) !important;
+  border-color: #23272b !important;
+}
+body.dark .form-control,
+body.dark .form-select {
+  background-color: var(--bg-color-dark) !important;
+  color: var(--text-color-dark) !important;
+  border-color: #444 !important;
+}
+body.dark .form-control:focus,
+body.dark .form-select:focus {
+  background-color: var(--bg-color-dark) !important;
+  color: var(--text-color-dark) !important;
+  border-color: #888 !important;
+  box-shadow: 0 0 0 0.2rem rgba(248,249,250,0.15);
+}
+body.dark .form-label,
+body.dark label {
+  color: var(--text-color-dark) !important;
+}
+body.dark .table-dark {
+  background-color: #23272b !important;
+  color: var(--text-color-dark) !important;
+}
+body.dark .card,
+body.dark .card-header,
+body.dark .card-body {
+  background-color: var(--bg-color-dark) !important;
+  color: var(--text-color-dark) !important;
+}
+body.dark .btn-light {
+  background-color: #f8f9fa !important;
+  color: #212529 !important;
+}
+body.dark .btn-primary {
+  background: linear-gradient(90deg, #43a047 0%, #2e7d32 100%) !important;
+  color: #fff !important;
+}
+body.dark .btn-outline-primary {
+  color: #fff !important;
+  border-color: #fff !important;
+}
+body.dark .btn-outline-primary:hover {
+  background-color: #2e7d32 !important;
+  color: #fff !important;
+}
+
+/* Accessibility: visible focus outlines for all focusable elements */
+:focus {
+  outline: 2px solid #1976d2 !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 2px #90caf9 !important;
+}
+.focus-visible:focus {
+  outline: 2px solid #1976d2 !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 2px #90caf9 !important;
+}
+
+/* Ensure high contrast for focus in dark mode */
+body.dark :focus, body.dark .focus-visible:focus {
+  outline: 2px solid #ffb300 !important;
+  box-shadow: 0 0 0 2px #ffb300 !important;
+}
+
+/* Product image zoom-in effect (desktop only) */
+@media (min-width: 768px) {
+  .product-image-zoom {
+    transition: transform 0.4s cubic-bezier(0.4,0,0.2,1), box-shadow 0.3s;
+    cursor: zoom-in;
+  }
+  .product-image-zoom:hover {
+    transform: scale(1.1);
+    z-index: 2;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.13);
+  }
+}
+
